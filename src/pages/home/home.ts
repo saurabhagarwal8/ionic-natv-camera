@@ -1,13 +1,45 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { IonicPage, NavController} from 'ionic-angular';
 
+import {Camera, CameraOptions} from '@ionic-native/camera';
+
+
+
+@IonicPage()
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  path:string;
+  pathDis:boolean;
+
+  constructor(public navCtrl: NavController, public camera:Camera) {
+    this.path="http://savings.gov.pk/wp-content/plugins/ldd-directory-lite/public/images/noimage.png";
+    this.pathDis=false;
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad HomePage');
+  }
+
+  takePic(){
+
+    let options: CameraOptions = {
+      quality:100,
+      destinationType:this.camera.DestinationType.FILE_URI,
+      encodingType:this.camera.EncodingType.PNG,
+      mediaType:this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then(url =>{
+      this.path=url;
+      this.pathDis=true;
+      alert("Image Path : "+ url);
+    }, err =>{
+      alert("Error : "+err);
+    });
 
   }
 
