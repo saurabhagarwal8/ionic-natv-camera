@@ -14,6 +14,7 @@ export class HomePage {
 
   path:string;
   pathDis:boolean;
+  image;
 
   constructor(public navCtrl: NavController, public camera:Camera) {
     this.path="http://savings.gov.pk/wp-content/plugins/ldd-directory-lite/public/images/noimage.png";
@@ -27,7 +28,7 @@ export class HomePage {
   takePic(){
 
     let options: CameraOptions = {
-      quality:100,
+      quality:50,
       destinationType:this.camera.DestinationType.FILE_URI,
       encodingType:this.camera.EncodingType.PNG,
       mediaType:this.camera.MediaType.PICTURE
@@ -36,7 +37,9 @@ export class HomePage {
     this.camera.getPicture(options).then(url =>{
       this.path=url;
       this.pathDis=true;
-      alert("Image Path : "+ url);
+      console.log("Image Path : "+ url);
+      this.path = 'data:image/png;base64,'+url;
+      console.log(this.image);
     }, err =>{
       alert("Error : "+err);
     });
