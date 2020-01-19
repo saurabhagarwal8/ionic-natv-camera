@@ -15,6 +15,8 @@ export class HomePage {
   path:string;
   pathDis:boolean;
   image;
+  files:File;
+  files2:File;
 
   constructor(public navCtrl: NavController, public camera:Camera) {
     this.path="http://savings.gov.pk/wp-content/plugins/ldd-directory-lite/public/images/noimage.png";
@@ -37,13 +39,33 @@ export class HomePage {
     this.camera.getPicture(options).then(url =>{
       this.path=url;
       this.pathDis=true;
-      console.log("Image Path : "+ url);
+      //console.log("Image Path : "+ url);
       this.path = 'data:image/png;base64,'+url;
-      console.log(this.image);
+      console.log(this.path);
+
+      fetch(this.path)
+        .then(res => res.blob())
+        .then(blob => {
+          this.files = new File([blob], "File name",{ type: "image/png" })
+          console.log(this.files);
+      })
+
+      this.urltoFile(this.path, 'image.jpeg','image/jpeg').then(val=>{
+        this.files2=val;
+        console.log(this.files2);
+      })
+
     }, err =>{
       alert("Error : "+err);
     });
 
   }
+
+   urltoFile(url, filename, mimeType){
+    return (fetch(url)
+        .then(function(res){return res.arrayBuffer();})
+        .then(function(buf){return new File([buf], filename,{type:mimeType});})
+    );
+}
 
 }
